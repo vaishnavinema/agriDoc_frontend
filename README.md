@@ -37,9 +37,6 @@ Install dependencies:
 
 npm install
 
-or
-
-yarn install
 
 Set up Environment Variables:
 Since this project was set up with Vite, create a file named .env.local in the root of your project and add the base URL for your backend API:
