@@ -291,7 +291,7 @@ const UploadSection = ({ t, currentUser, setPage }) => {
     } catch (err) { setError(err.message || t.errorDiagnose); } finally { setIsAnalyzing(false); }
   };
 
-  useEffect(() => { if (imageFile) { handleDiagnose(); } }, [imageFile]);
+  useEffect(() => { if (imageFile) { handleDiagnose(); } }, [imageFile, currentUser, t.errorDiagnose]);
   const triggerFileSelect = () => fileInputRef.current.click();
 
   if (!currentUser) { return <LoginPrompt t={t} setPage={setPage} />; }
@@ -535,15 +535,16 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const t = translations[lang];
 
+  // This effect handles redirection after login or logout.
   useEffect(() => {
-    if (!currentUser) {
-      if (page !== 'login' && page !== 'register') {
-        setPage('landing');
-      }
-    } else {
+    if (currentUser) {
+      // If user is logged in, always start them at the dashboard.
       setPage('dashboard');
+    } else {
+      // If user is logged out, send them to the landing page.
+      setPage('landing');
     }
-  }, [currentUser, page]);
+  }, [currentUser]); // Only re-run this effect when the currentUser state changes.
 
   const handleLogin = (user) => { setCurrentUser(user); };
   const handleLogout = () => { setCurrentUser(null); };
